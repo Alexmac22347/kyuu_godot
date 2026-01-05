@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpp6n43a5jney"]
+
+[ext_resource type="PackedScene" uid="uid://c0lrssqts1p4d" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://c1twfnb7hd2xe" path="res://terrain_manager.gd" id="2_0xm2m"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 1.0
+
+[node name="Main" type="Node"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.102237, -0.411303, 0.905747, 0, 0.910518, 0.41347, -0.99476, 0.0422719, -0.0930886, 38.2243, 23.8154, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.178, -4.69009)
+
+[node name="Measuring Stick" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.303, 0.892, -17.6825)
+mesh = SubResource("CylinderMesh_0xm2m")
+
+[node name="TerrainManager" type="Node3D" parent="."]
+script = ExtResource("2_0xm2m")
