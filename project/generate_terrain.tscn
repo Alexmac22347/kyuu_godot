@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bmtkcsc1mh814"]
+
+[ext_resource type="Script" uid="uid://c1twfnb7hd2xe" path="res://generate_terrain.gd" id="1_15myp"]
+
+[node name="GenerateTerrain" type="Node" unique_id=1026003686]
+script = ExtResource("1_15myp")

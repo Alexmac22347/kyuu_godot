@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 
 @export var heightmap_path: String = "res://assets/heightmaps/falklands/-51_775_-59_436_12_13000_9000.png"
 @export var output_folder: String = "res://assets/terrain/falklands/"
@@ -12,9 +12,7 @@ const LOD_DIVIDERS: Array[int] = [8]
 
 
 func _ready():
-	load_terrain_from_disk()
-	return
-	## generate_heightmap()
+	generate_heightmap()
 
 func load_terrain_from_disk() -> void:
 	var lod_divider: int = 8
