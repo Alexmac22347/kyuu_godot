@@ -43,6 +43,7 @@ func generate_heightmap() -> void:
 
 func generate_chunk(img: Image, x: int, y: int, lod_divider: int, lod_size: int) -> void:
 	var chunk_index_denominator = lod_divider*SMALLEST_CHUNK_SIZE
+	@warning_ignore("integer_division")
 	var chunk_id: String = "%d_%d_lod%d" % [x/chunk_index_denominator, y/chunk_index_denominator, lod_divider]
 	print("preparing chunk: ", chunk_id)
 	var st = SurfaceTool.new()
@@ -68,7 +69,9 @@ func generate_chunk(img: Image, x: int, y: int, lod_divider: int, lod_size: int)
 			
 			# reset chunk position back to (0,0).
 			var triangle_width: float = CELL_SIZE * lod_divider
+			@warning_ignore("narrowing_conversion")
 			var x0: int = (pixel_x * triangle_width) - x
+			@warning_ignore("narrowing_conversion")
 			var y0: int = (pixel_y * triangle_width) - y
 			
 			## Two triangles per cell
