@@ -22,7 +22,7 @@ func _ready() -> void:
 	camera = $RotationHelper/Camera3D
 	rotation_helper = $RotationHelper
 	DEFAULT_FOV = camera.fov
-	
+
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta: float) -> void:
@@ -32,7 +32,7 @@ func _physics_process(delta: float) -> void:
 func process_input(delta: float) -> void:
 	dir = Vector3()
 	var cam_xform = camera.get_global_transform()
-	
+
 	var input_movement_vector = Vector2()
 
 	if Input.is_action_pressed("movement_forward"):
@@ -45,7 +45,7 @@ func process_input(delta: float) -> void:
 		input_movement_vector.x -= 1
 	if Input.is_action_pressed("movement_right"):
 		input_movement_vector.x += 1
-		
+
 	if Input.is_action_pressed("aim_weapon") and camera.fov > ZOOMED_FOV:
 		camera.fov -= ZOOM_SPEED * delta
 	if !Input.is_action_pressed("aim_weapon") and camera.fov < DEFAULT_FOV:
@@ -61,7 +61,7 @@ func process_input(delta: float) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			
+
 func process_movement(delta: float) -> void:
 	dir.y = 0
 	dir = dir.normalized()
