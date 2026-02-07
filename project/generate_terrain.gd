@@ -1,7 +1,10 @@
 ## heightmaps come from https://manticorp.github.io/unrealheightmap.
-## DO NOT ASSUME ALL IMAGE SAME DIMENSIONS
+## This code assumes all tiles are the same size, so you have to be careful edge tiles
+## arent being resized. you can do this by making the tiles, and the total heightmap be a multiple of each other.
+##
 ## absolutely no texturing is done here in order to preserve vram.
 ## thats because the same texture can be used for multiple chunks.
+##
 ## EXR format:
 ## Pixel space is a 2D coordinate system with x increasing from left to right
 ## and y increasing from top to bottom.
@@ -11,17 +14,17 @@ extends Node
 
 const HEIGHTMAP_PATH: String = "res://assets/heightmaps/vancouver/"
 const OUTPUT_FOLDER: String = "res://assets/terrain/vancouver/"
-const HEIGHT_SCALE: float = 1.0
-const AREA_SCALE: float = 50.0
-const WATER_CUTOFF: float = -10
+const HEIGHT_SCALE: float = 1900
+const AREA_SCALE: float = 12.5
+const WATER_CUTOFF: float = 0.001
 
 ## the size of a single chunk in meters.
 ## each meter of the heighmap is 1 pixel
 const SMALLEST_CHUNK_SIZE: int = 256
 ## the number of pixels to skip when generating a chunk.
 ## higher number means lower detail.
-#const LOD_DIVIDERS: Array[int] = [1,2,4,8,16]
-const LOD_DIVIDERS: Array[int] = [1,4,16]
+#const LOD_DIVIDERS: Array[int] = [1,2,4,8]
+const LOD_DIVIDERS: Array[int] = [2,8]
 
 
 func _ready():
@@ -42,6 +45,8 @@ func generate_heightmap() -> void:
 		var lod_size: int = lod_divider * SMALLEST_CHUNK_SIZE
 		for chunk_x in range(0, width, lod_size):
 			for chunk_y in range(0, height, lod_size):
+				## TODO: this is too strict. If any bit of the chunk is out of bounds,
+				## we dont bother. This is preventing us from generating a lot of the big chunks.
 				if (chunk_x+lod_size >= width ) || (chunk_y+lod_size >= height):
 					continue
 				generate_chunk(raw_pixel_values, chunk_x, chunk_y, lod_divider, lod_size)
@@ -70,10 +75,10 @@ func generate_pixel_values_from_heightmap_folder(heightmap_folder: String) -> Ar
 			file_name = dir.get_next()
 			continue
 		if file_width_pixels == 0 && file_height_pixels == 0:
-			var img: Image = Image.new()
-			img.load(heightmap_folder+file_name)
-			file_width_pixels = img.get_width()
-			file_height_pixels = img.get_height()
+			var img2: Image = Image.new()
+			img2.load(heightmap_folder+file_name)
+			file_width_pixels = img2.get_width()
+			file_height_pixels = img2.get_height()
 		var regex_result = regex.search(file_name)
 		## the second coord is left/right/width on the file names
 		## i know this because the falklands heightmap is a lot wider than it is tall,
@@ -96,6 +101,7 @@ func generate_pixel_values_from_heightmap_folder(heightmap_folder: String) -> Ar
 
 	print("pixel array width: ", pixel_array.size(), " height: ", pixel_array[0].size())
 
+	var img: Image = Image.new()
 	dir.list_dir_begin()
 	file_name = dir.get_next()
 	while file_name != "":
@@ -108,21 +114,13 @@ func generate_pixel_values_from_heightmap_folder(heightmap_folder: String) -> Ar
 		var file_y_offset: int = regex_result.get_string(1).to_int() - 1
 		var file_x_offset: int = regex_result.get_string(2).to_int() - 1
 
-		var img: Image = Image.new()
 		img.load(heightmap_folder+file_name)
-
-		if file_x_offset == 9 and file_y_offset == 0:
-			var alex = true
 
 		for y in range(img.get_height()):
 			for x in range(img.get_width()):
 				var true_x: int = (file_x_offset*file_width_pixels) + x
 				var true_y: int = (file_y_offset*file_height_pixels) + y
-				if true_x == 2048:
-					var bob = true
-
 				var pixel: Color = img.get_pixel(x,y)
-
 				pixel_array[true_x][true_y] = pixel.r
 		file_name = dir.get_next()
 
@@ -134,6 +132,9 @@ func generate_chunk(pixel_values: Array[Array], x: int, y: int, lod_divider: int
 	@warning_ignore("integer_division")
 	var chunk_id: String = "%d_%d_lod%d" % [x/chunk_index_denominator, y/chunk_index_denominator, lod_divider]
 	print("preparing chunk: ", chunk_id)
+	if chunk_id == "6_2_lod4":
+		var bob = true
+
 	var st = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 
