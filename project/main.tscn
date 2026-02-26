@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c0lrssqts1p4d" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://c1twfnb7hd2xe" path="res://generate_terrain.gd" id="2_0xm2m"]
+[ext_resource type="ArrayMesh" path="res://assets/terrain/vancouver/0_0_lod1.res" id="3_h2yge"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]
 top_radius = 0.2
@@ -15,7 +16,7 @@ transform = Transform3D(-0.102237, -0.411303, 0.905747, 0, 0.910518, 0.41347, -0
 shadow_enabled = true
 
 [node name="Player" parent="." unique_id=2133884990 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.178, -4.69009)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.022156, 5.738804, 7.4341116)
 
 [node name="Measuring Stick" type="MeshInstance3D" parent="." unique_id=2135754318]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.303, 0.892, -17.6825)
@@ -24,5 +25,5 @@ mesh = SubResource("CylinderMesh_0xm2m")
 [node name="TerrainManager" type="Node3D" parent="." unique_id=837158774]
 script = ExtResource("2_0xm2m")
 
-[node name="713Lod2" type="MeshInstance3D" parent="." unique_id=261527567]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 317, 212)
+[node name="00Lod1" type="MeshInstance3D" parent="." unique_id=1338741603]
+mesh = ExtResource("3_h2yge")
